@@ -1,5 +1,6 @@
 package com.geektech.myloveanim.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,10 @@ class AnimAdapter: RecyclerView.Adapter<AnimAdapter.ViewHolder>() {
 
     private var animList: List<AnimModel> = ArrayList()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setupAnimList(list: List<AnimModel>){
         this.animList = list
+        notifyDataSetChanged()
 
     }
 

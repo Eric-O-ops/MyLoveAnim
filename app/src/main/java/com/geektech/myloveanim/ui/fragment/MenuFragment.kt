@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.geektech.myloveanim.MainViewModel
+import com.geektech.myloveanim.MenuViewModel
 import com.geektech.myloveanim.data.server.LocalServer
 import com.geektech.myloveanim.databinding.FragmentMenuBinding
 import com.geektech.myloveanim.ui.adapter.AnimAdapter
@@ -16,9 +16,9 @@ class MenuFragment : Fragment() {
 
     private lateinit var binding: FragmentMenuBinding
 
-    private val animAdapter = AnimAdapter()
+    private var viewModel: MenuViewModel? = null
 
-    private var viewModel: MainViewModel? = null
+    private val animAdapter = AnimAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,33 +31,35 @@ class MenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MenuViewModel::class.java]
 
         init()
-        setupObserve()
+        addList()
     }
 
     private fun init() {
+        binding.rv.adapter = animAdapter
+        binding.rv.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel?.setList(LocalServer.getAnimList())
-
-        binding.addListAnim.setOnClickListener {
-            binding.rv.adapter = animAdapter
-            binding.rv.layoutManager = LinearLayoutManager(requireContext())
-            changeVisibleButton()
-
-        }
     }
 
     private fun setupObserve(){
-        viewModel?.data?.observe(requireActivity()){
-            animAdapter.setupAnimList(it)
-
+        viewModel?.data?.observe(viewLifecycleOwner){
+                animAdapter.setupAnimList(it)
         }
     }
 
     private fun changeVisibleButton(){
         binding.addListAnim.visibility = View.GONE
 
+    }
+
+    private fun addList(){
+        binding.addListAnim.setOnClickListener {
+            changeVisibleButton()
+            viewModel?.setList(LocalServer.getAnimList())
+            setupObserve()
+
+        }
     }
 }
