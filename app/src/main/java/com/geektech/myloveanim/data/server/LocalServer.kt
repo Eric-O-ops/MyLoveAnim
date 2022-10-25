@@ -3,10 +3,9 @@ package com.geektech.myloveanim.data.server
 import com.geektech.myloveanim.model.AnimModel
 
 object LocalServer {
-    private var animList:java.util.ArrayList<AnimModel> = ArrayList()
 
     fun getAnimList():List<AnimModel>{
-
+        val animList:ArrayList<AnimModel> = ArrayList()
         animList.add(AnimModel("1.Магическая битва"))
         animList.add(AnimModel("2.Баракамон"))
         animList.add(AnimModel("3.Атака титанов"))
